@@ -6,7 +6,7 @@
 # Contact: mustafacavus@eskisehir.edu.tr
 # -------------------------------------------------------------------------------------------------
 
-# Dataset
+# Dataset in Westfall and Young (1993) Resampling-Based Multiple Testing: Examples and Methods for P-Value Adjustment
 # Example: Litter Weight Dose Response
 # A data set analyzed by Westfall and Rom (1990) involces
 # litter weights of mice born from mothers assigned to three 

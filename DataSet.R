@@ -6,6 +6,46 @@
 # Contact: mustafacavus@eskisehir.edu.tr
 # -------------------------------------------------------------------------------------------------
 
+# Example 1 #######################################################################################
+
+# Call the doex package
+library(doex)
+
+# print hybrid data in Weerahandi (1995)
+hybrid
+
+# observations of the hybrid data
+hybrid$data
+
+# group labels of the hybrid data
+hybrid$species
+
+# The ggplot2 package can be used to plot the box plot of the data in Figure 1.
+ggplot(hybrid, aes(x = species, y = data)) + 
+  geom_boxplot() +
+  ylab("Yield") +
+  xlab("Corn Species")
+
+# Look at the summary statistics of the data before using the tests.
+# Use psych package to obtain the descriptive statistics of the hybrid data
+library(psych)
+
+# Describe the hybrid data by species using describe.by(.) function
+describe.by(hybrid$data, hybrid$species)
+
+# It is seen that the variances of the species are unequal
+# Thus we need to use the tests for equality of the group means under unequal variances
+#
+# Examples of the use of the AF and GF tests on the hybrid data are given in the follows.
+# The following code performs the Approximate F-test on the hybrid data.
+AF(hybrid$data,hybrid$species)
+
+# Following code performs the Generalized F-test.
+GF(hybrid$data,hybrid$species)
+
+
+# Example 2 #######################################################################################
+
 # Dataset in Westfall and Young (1993) Resampling-Based Multiple Testing: Examples and Methods for P-Value Adjustment
 # Example: Litter Weight Dose Response
 # A data set analyzed by Westfall and Rom (1990) involces
@@ -13,10 +53,6 @@
 # different dosage groups and a control. For the low dose
 # group the dose metameter is 5, for the medium dose 
 # group it is 50, and for the high dose group it is 500.
-
-# Verify the packages
-library(doex)
-library(car)
 
 # average litter weight data
 weight_data <- c(22.69, 26.59, 28.85, 28.03, 29.05,
@@ -41,14 +77,22 @@ dose <- as.factor(c(rep("0", 20), rep("5", 19),
 
 born_weight_data <- data.frame(weight_data, dose) 
 
-# testing the variance homogeneity assumption
-car::leveneTest(weight_data ~ dose)
+# The ggplot2 package can be used to plot the box plot of the data in Figure 2.
+ggplot(born_weight_data, aes(x = dose, y = weight_data)) + 
+  geom_boxplot() +
+  ylab("Born Weight (gr)") +
+  xlab("Dose Treatment")
 
-# F-value = 3.3819, p-value: 0.0229*
+# Describe the born weight data by species using describe.by(.) function
+describe.by(born_weight_data$weight_data, born_weight_data$dose)
 
-# testing the equality of means of the weight data for dose treatments
+# It is seen that the variances of the dose groups may be unequal
+# To conclude whether the variance homogenity assumption is valid, 
+# Levene test is used. 
+car::LeveneTest(weight_data ~ dose)
+
+# The GF, AF, and PB are used to conclude there is a significance difference between 
+# the mean born weight of mice according to used dose group.
+doex::GF(weight_data, dose)
 doex::AF(weight_data, dose)
-
-
-
-
+doex::PB(weight_data, dose)
